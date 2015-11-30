@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -52,10 +51,11 @@ class ArticlesController extends Controller
                 $extension = '.gif';
             else
                 $extension = '';
-        $img->save(public_path('images/'.$request->title.$extension));
+        $file =  str_replace(' ','-',$request->title.$extension) ;
+        $img->save(public_path('images/articles/'.$file));
         $article = new Article();
         $article = Article::create($request->except('images'));
-        $article->images = $request->title.$extension;
+        $article->images = $file;
         $article->save();
         return redirect(route('articles.index'));
     }
@@ -107,8 +107,9 @@ class ArticlesController extends Controller
                 $extension = '.gif';
             else
                 $extension = '';
-            $img->save(public_path('images/'.$request->title.$extension));
-            $article->images = $request->title.$extension;
+            $file =  str_replace(' ','-',$request->title.$extension) ;
+            $img->save(public_path('images/articles/'.$file));
+            $article->images = $file;
             $article->save();
             return redirect(route('articles.index'));
         }

@@ -25,7 +25,7 @@
                     <tbody>
                     @foreach($articles as $article)
                         <tr>
-                            <td><img src="{{ url('images/'.$article->images) }}" alt="" width="150px"></td>
+                            <td><img src="{{ url('images/articles/'.$article->images) }}" alt="" width="150px"></td>
                             <td>{{ $article->title }}</td>
                             <td>{{ $article->created_at }}</td>
                             <td>

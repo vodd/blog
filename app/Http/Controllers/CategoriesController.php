@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -39,7 +38,7 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\EditArticleRequest $request)
     {
 
         $img = Image::make($request->images);
@@ -52,10 +51,11 @@ class CategoriesController extends Controller
             $extension = '.gif';
         else
             $extension = '';
-        $img->save(public_path('images/categories/'.$request->title.$extension));
+        $file =  str_replace(' ','-',$request->title.$extension) ;
+        $img->save(public_path('images/categories/'.$file));
         $category = new Category();
         $category = Category::create($request->except('images'));
-        $category->images = $request->title.$extension;
+        $category->images = $file;
         $category->save();
         return redirect('admin');
     }
@@ -91,7 +91,7 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\EditArticleRequest $request, $id)
     {
         $cat = Category::findOrfail($id);
         $cat->update($request->except('images'));
@@ -106,10 +106,11 @@ class CategoriesController extends Controller
                 $extension = '.gif';
             else
                 $extension = '';
-            $img->save(public_path('images/categories/'.$request->title.$extension));
-            $cat->images = $request->title.$extension;
-            $cat->save();
-            return redirect('admin');
+          $file =  str_replace(' ','-',$request->title.$extension) ;
+          $img->save(public_path('images/categories/'.$file));
+          $cat->images = $file;
+          $cat->save();
+          return redirect('admin');
         }
         return redirect('admin');
     }

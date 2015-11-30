@@ -24,7 +24,7 @@ class EditArticleRequest extends Request
     public function rules()
     {
         return [
-            'title' => 'required|min:5|unique:articles',
+            'title' => 'required|min:5',
             'images'    => 'image'
         ];
     }

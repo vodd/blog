@@ -25,7 +25,7 @@
                     <tbody>
                     @foreach($page as $p)
                         <tr>
-                            <td><img src="{{ url('images/page'.$p->images) }}" alt="" width="150px"></td>
+                            <td><img src="{{ url('images/page/'.$p->images) }}" alt="" width="150px"></td>
                             <td>{{ $p->title }}</td>
                             <td>{{ $p->created_at }}</td>
                             <td>

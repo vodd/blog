@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Page;
@@ -30,7 +28,7 @@ class PagesController extends Controller
      */
     public function create()
     {
-        return view('pages.create');           
+        return view('pages.create');
     }
 
     /**
@@ -39,7 +37,7 @@ class PagesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\EditArticleRequest $request)
     {
         $img = Image::make($request->images);
         $mime = $img->mime();  //edited due to updated to 2.x
@@ -51,10 +49,11 @@ class PagesController extends Controller
                 $extension = '.gif';
             else
                 $extension = '';
-        $img->save(public_path('images/page/'.$request->title.$extension));
+        $file =  str_replace(' ','-',$request->title.$extension) ;
+        $img->save(public_path('images/page/'.$file));
         $page = new Page();
         $page = Page::create($request->except('images'));
-        $page->images = $request->title.$extension;
+        $page->images = $file;
         $page->save();
         return redirect(route('pages.index'));
     }
@@ -89,7 +88,7 @@ class PagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\EditArticleRequest $request, $id)
     {
         $page = Page::findOrfail($id);
         $page->update($request->except('images'));
@@ -104,12 +103,13 @@ class PagesController extends Controller
                 $extension = '.gif';
             else
                 $extension = '';
-            $img->save(public_path('images/page/'.$request->title.$extension));
-            $page->images = $request->title.$extension;
-            $page->save();
-            return redirect('admin');
+        $file =  str_replace(' ','-',$request->title.$extension) ;
+        $img->save(public_path('images/page/'.$file));
+        $page->images = $file;
+        $page->save();
+        return view('pages.index')->with('success','Page editer avec succes');
         }
-        return redirect('admin');
+        return view('pages.index')->with('success','Page editer avec succes');
     }
 
     /**
